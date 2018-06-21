@@ -90,7 +90,8 @@ $ ./stack.sh
 
 설치 완료 후 동작 확인을 위해 Dashboard에 접속해본다. (ID/Password: admin/nova)
 
-
+ONOS 연동 확인을 위해 Network/Subnet을 생성해본다.
+ ㅇ n
 
 
 
