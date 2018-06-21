@@ -81,3 +81,16 @@ KEYSTONE_BRANCH=stable/queens
 NEUTRON_BRANCH=stable/queens
 NOVA_BRANCH=stable/queens
 ```
+
+Stack.sh 명령 수행을 통해 OpenStack을 설치한다.
+```
+$ cd ~/devstack
+$ ./stack.sh
+```
+
+설치 완료 후 동작 확인을 위해 Dashboard에 접속해본다. (ID/Password: admin/nova)
+
+
+
+
+
