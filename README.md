@@ -223,6 +223,7 @@ $
 
 router에서 interface 하나를 삭제하고 ping이 안되는 것을 확인한다.
  
+# SONA CLI
  
  
  
