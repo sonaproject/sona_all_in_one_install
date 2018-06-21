@@ -125,7 +125,7 @@ ID                                      Name                Network Mode        
 onos> 
 ```
  
-#Exercise 1: East-west routing
+# Exercise 1: East-west routing
 Openstack에서 서로 다른 Network에 속한 VM간 통신이 필요한 경우(=east-west routing), 가상의 router를 생성하여 Network를 연동해야 한다.
 
 Horizon을 통해 Router를 생성한다.
