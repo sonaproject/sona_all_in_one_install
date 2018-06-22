@@ -363,6 +363,12 @@ Router IP           Mac Address         VLAN ID
 172.27.0.1          44:4C:A8:A7:EC:C7   None
 ```
 
+openstack-update-peer-router: 물리 라우터의 Mac or Vlan ID 정보 수동 변경
+
+
+openstack-delete-peer-router: 물리 라우터 정보 삭제
+
+# Gateway 구성
 
 
 
