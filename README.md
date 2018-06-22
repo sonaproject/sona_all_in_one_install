@@ -238,8 +238,129 @@ openstack-sync-states                openstack-update-peer-router
 openstack-update-peer-router-vlan
 ```
 
-openstack-nodes
-~~~~~~~~~~~~~~~~~~
+openstack-nodes: Compute/Gateway/Controller Node에 대한 정보 조회
+```
+onos> openstack-nodes
+Hostname            Type           Integration Bridge      Management IP           Data IP             VLAN Intf           Uplink Port    State
+compute-01          COMPUTE        of:00000000000000a1     10.1.1.5                10.1.1.5                                               COMPLETE
+controller          CONTROLLER     null                    10.1.1.5                                                                       COMPLETE
+Total 2 nodes
+```
+
+openstack-node-check: Node별 상태 조회
+```
+onos> openstack-node-check compute-01
+[Integration Bridge Status]
+OK br-int=of:00000000000000a1 available=true {managementAddress=10.1.1.5, protocol=OF_14, channelId=10.1.1.5:59440}
+OK vxlan portNum=1 enabled=true {adminState=enabled, portName=vxlan, portMac=42:50:00:b0:c4:a5}
+```
+
+openstack-node-init: Node 초기화 시 사용
+```
+onos> openstack-node-init -a
+Initializing compute-01
+Initializing controller
+Done.
+```
+
+openstack-networks, openstack-ports, openstack-routers, openstack-security-groups: OpenStack에서 생성한 network/port/router/security-group 정보 조회
+```
+onos> openstack-networks
+ID                                      Name                Network Mode        VNI                 Subnets
+90b74fc7-c6e7-4254-830c-ab46ece25f83    net1                VXLAN               96                  [20.1.1.0/24]
+84001230-81d4-48dd-9fbd-c7c48ab47814    net2                VXLAN               91                  [20.2.2.0/24]
+
+onos> openstack-ports
+ID                                      Network             MAC                 Fixed IPs
+be4e9afe-96e4-4c2e-a99d-be055ff1bfa8    net2                fa:16:3e:8c:77:f4   [20.2.2.5]
+d064ef9c-1a29-4b1d-91e9-e5f506f4a212    net2                fa:16:3e:70:46:cc   [20.2.2.1]
+6134aed6-2a4c-47e1-b00d-6dc5f0dccbe1    net1                fa:16:3e:ba:5e:c3   [20.1.1.5]
+fc528e8a-6b4b-4cea-9d20-ebb57327e4a0    net1                fa:16:3e:23:c0:78   [20.1.1.1]
+
+onos> openstack-security-groups
+Hint: use --json option to see security group rules as well
+
+ID                                      Name
+9216577e-51f9-4aaa-862e-cd0d545ea5c1    default
+940b7b99-11a2-4bea-af39-eb7b6520f52a    default
+
+onos> openstack-routers
+ID                                      Name                External            Internal
+7bfb0e90-faa1-4fbc-8d9a-4167abd66a5d    router              []                  [20.1.1.1, 20.2.2.1]
+```
+
+openstack-sync-states: Openstack의 Neutron에서 보유한 정보 기준으로 ONOS의 분산 Store를 초기화
+```
+onos> openstack-sync-states
+Synchronizing OpenStack security groups
+ID                                      Name
+9216577e-51f9-4aaa-862e-cd0d545ea5c1    default
+940b7b99-11a2-4bea-af39-eb7b6520f52a    default
+
+Synchronizing OpenStack networks
+ID                                      Name                VNI                 Subnets
+84001230-81d4-48dd-9fbd-c7c48ab47814    net2                91                  [dc17bc95-6863-47f2-a5b3-17b2096beee3]
+90b74fc7-c6e7-4254-830c-ab46ece25f83    net1                96                  [bdaec5da-0dce-46d6-9326-2d3afa706a9a]
+
+Synchronizing OpenStack subnets
+ID                                      Network             CIDR
+bdaec5da-0dce-46d6-9326-2d3afa706a9a    net1                20.1.1.0/24
+dc17bc95-6863-47f2-a5b3-17b2096beee3    net2                20.2.2.0/24
+
+Synchronizing OpenStack ports
+ID                                      Network             MAC                 Fixed IPs
+6134aed6-2a4c-47e1-b00d-6dc5f0dccbe1    net1                fa:16:3e:ba:5e:c3   [20.1.1.5]
+be4e9afe-96e4-4c2e-a99d-be055ff1bfa8    net2                fa:16:3e:8c:77:f4   [20.2.2.5]
+d064ef9c-1a29-4b1d-91e9-e5f506f4a212    net2                fa:16:3e:70:46:cc   [20.2.2.1]
+fc528e8a-6b4b-4cea-9d20-ebb57327e4a0    net1                fa:16:3e:23:c0:78   [20.1.1.1]
+
+Synchronizing OpenStack routers
+ID                                      Name                External            Internal
+7bfb0e90-faa1-4fbc-8d9a-4167abd66a5d    router                                  [20.1.1.1, 20.2.2.1]
+
+Synchronizing OpenStack floating IPs
+ID                                      Floating IP         Fixed IP
+```
+
+openstack-purge-rules: ONOS에서 설치한 SONA 관련 flow rule을 wipe-out
+```
+onos> openstack-purge-rules
+Successfully purged flow rules installed by OpenStack networking application.
+onos> flows
+deviceId=of:00000000000000a1, flowRuleCount=0
+deviceId=ovsdb:10.1.1.5, flowRuleCount=0
+```
+
+openstack-sync-rules: SONA 관련 flow rule 재설치
+
+```
+onos> openstack-sync-rules
+Successfully requested re-installing flow rules.
+onos> flows
+deviceId=of:00000000000000a1, flowRuleCount=13
+    id=b0000bb4b9281, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=42000, tableId=0, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:ipv4, IP_PROTO:17, UDP_SRC:68, UDP_DST:67], treatment=DefaultTrafficTreatment{immediate=[OUTPUT:CONTROLLER], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00000cf08aec, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=40000, tableId=0, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:arp, ARP_OP:2, ARP_TPA:20.2.2.5, ARP_THA:FA:16:3E:8C:77:F4], treatment=DefaultTrafficTreatment{immediate=[OUTPUT:5], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00001bbf7df7, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=40000, tableId=0, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:arp, ARP_OP:2, ARP_TPA:20.1.1.5, ARP_THA:FA:16:3E:BA:5E:C3], treatment=DefaultTrafficTreatment{immediate=[OUTPUT:4], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b0000fbcbc22b, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=40000, tableId=0, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:arp, ARP_OP:1], treatment=DefaultTrafficTreatment{immediate=[OUTPUT:FLOOD], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00001461d721, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=0, tableId=0, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[], treatment=DefaultTrafficTreatment{immediate=[], deferred=[], transition=TABLE:10, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00004ac6c2f2, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=30000, tableId=10, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[IN_PORT:4, ETH_TYPE:ipv4], treatment=DefaultTrafficTreatment{immediate=[TUNNEL_ID:60], deferred=[], transition=TABLE:20, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b000072e2e83e, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=30000, tableId=10, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[IN_PORT:5, ETH_TYPE:ipv4], treatment=DefaultTrafficTreatment{immediate=[TUNNEL_ID:5b], deferred=[], transition=TABLE:20, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b0000e8f1b0d8, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=0, tableId=10, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[], treatment=DefaultTrafficTreatment{immediate=[], deferred=[], transition=TABLE:20, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00007314ee8c, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=0, tableId=20, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[], treatment=DefaultTrafficTreatment{immediate=[], deferred=[], transition=TABLE:30, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00000d2ffa7a, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=30000, tableId=30, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_DST:FE:00:00:00:00:02], treatment=DefaultTrafficTreatment{immediate=[], deferred=[], transition=TABLE:40, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b00007a117617, state=ADDED, bytes=0, packets=0, duration=1, liveType=UNKNOWN, priority=0, tableId=30, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[], treatment=DefaultTrafficTreatment{immediate=[], deferred=[], transition=TABLE:50, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b0000204719e5, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=30000, tableId=50, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:ipv4, IPV4_DST:20.1.1.5/32, TUNNEL_ID:60], treatment=DefaultTrafficTreatment{immediate=[ETH_DST:FA:16:3E:BA:5E:C3, OUTPUT:4], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+    id=b0000fcf5d547, state=ADDED, bytes=0, packets=0, duration=0, liveType=UNKNOWN, priority=30000, tableId=50, appId=org.onosproject.openstacknetworking, payLoad=null, selector=[ETH_TYPE:ipv4, IPV4_DST:20.2.2.5/32, TUNNEL_ID:5b], treatment=DefaultTrafficTreatment{immediate=[ETH_DST:FA:16:3E:8C:77:F4, OUTPUT:5], deferred=[], transition=None, meter=[], cleared=false, StatTrigger=null, metadata=null}
+deviceId=ovsdb:10.1.1.5, flowRuleCount=0
+```
+
+openstack-direct-ports: OpenStack에서 PCI-Passthrough or SR-IOV 용으로 생성한 port 정보 조회
+
+openstack-peer-routers: Gateway Node와 
+
+
+
+
 
 
 
