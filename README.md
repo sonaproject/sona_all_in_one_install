@@ -224,7 +224,25 @@ $
 router에서 interface 하나를 삭제하고 ping이 안되는 것을 확인한다.
  
 # SONA CLI
- 
+현재 ONOS CLI에서 사용가능한 SONA 관련 CLI는 하기와 같다.
+```
+onos> openstack-
+openstack-delete-peer-router         openstack-direct-ports
+openstack-floatingips                openstack-networks
+openstack-node-check                 openstack-node-init
+openstack-nodes                      openstack-peer-routers
+openstack-ports                      openstack-purge-rules
+openstack-purge-states               openstack-routers
+openstack-security-groups            openstack-sync-rules
+openstack-sync-states                openstack-update-peer-router
+openstack-update-peer-router-vlan
+```
+
+openstack-nodes
+~~~~~~~~~~~~~~~~~~
+
+
+
  
  
 
