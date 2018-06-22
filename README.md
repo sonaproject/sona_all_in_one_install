@@ -356,7 +356,14 @@ deviceId=ovsdb:10.1.1.5, flowRuleCount=0
 
 openstack-direct-ports: OpenStack에서 PCI-Passthrough or SR-IOV 용으로 생성한 port 정보 조회
 
-openstack-peer-routers: Gateway Node와 
+openstack-peer-routers: Gateway Node와 연동 중인 물리 라우터 정보 조회
+```
+onos> openstack-peer-routers
+Router IP           Mac Address         VLAN ID
+172.27.0.1          44:4C:A8:A7:EC:C7   None
+```
+
+
 
 
 
