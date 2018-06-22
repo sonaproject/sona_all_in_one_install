@@ -1,7 +1,7 @@
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
 
-SONA를 설치할 User에 대한 sudo 권한 부여 (하기 Example의 경우 sdn User에 대한 sudo 권한을 부여한다.
+SONA를 설치할 User에 대한 sudo 권한 부여 (하기 Example의 경우 sdn User에 대한 sudo 권한을 부여한다.)
 ```
 root@mcpark-all-in-one:~# visudo
 ...
