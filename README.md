@@ -223,7 +223,7 @@ $
 
 router에서 interface 하나를 삭제하고 ping이 안되는 것을 확인한다.
  
-# SONA CLI
+# Exercise 2: SONA CLI
 현재 ONOS CLI에서 사용가능한 SONA 관련 CLI는 하기와 같다.
 ```
 onos> openstack-
