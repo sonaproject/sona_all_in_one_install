@@ -1,3 +1,7 @@
+# References
+https://wiki.onosproject.org/display/ONOS/SONA+User+Guide
+https://github.com/sonaproject
+
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
 
@@ -368,7 +372,196 @@ openstack-update-peer-router: 물리 라우터의 Mac or Vlan ID 정보 수동 �
 
 openstack-delete-peer-router: 물리 라우터 정보 삭제
 
-# Gateway 구성
+# Exercise 3: SONA Gateway 구성을 통한 North-South Routing
+OpenStack에서 VxLAN Network를 사용하는 VM이 외부 인터넷 망과 통신을 하기 위해서는(=Norsh-South Routing) OpenStack Network Node 구성이 필요하다. Network Node에서 수행하는 Routing은 2가지 모드가 있는데, 1) Source NAT, 2) Floating IP 기반 Routing이 있다.
+
+SONA에서는 Network Node의 역할을 Gateway Node가 수행한다. Gateway Node는 Network Node가 제공하는 기능 외 하기의 Feature를 제공한다.
+1) Scability 보장, 2) Agentless, 3) 순수 OVS 기반 구현으로 Smart NIC, 물리 스위치 등으로 기능 Offload 가능
+
+Gateway Node 생성을 위한 VM 생성 및 OVS 설치
+```
+sdn@mcpark-all-in-one-gw:~$ sudo ovs-vsctl --version
+sudo: unable to resolve host mcpark-all-in-one-gw
+ovs-vsctl (Open vSwitch) 2.8.1
+DB Schema 7.15.0
+sdn@mcpark-all-in-one-gw:~$ ifconfig
+ens3      Link encap:Ethernet  HWaddr fa:16:3e:ab:ad:a7  
+          inet addr:10.1.1.15  Bcast:10.1.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::f816:3eff:feab:ada7/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1450  Metric:1
+          RX packets:16974 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:14828 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:32646745 (32.6 MB)  TX bytes:1239476 (1.2 MB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:736 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:736 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1 
+          RX bytes:55296 (55.2 KB)  TX bytes:55296 (55.2 KB)
+```
+
+Gateway Node는 Data Plane IP 외 외부망과의 연동을 위한 별도의 Uplink가 필요하다(Network Node도 동일). 본 Exercise에서는 Gateway Node가 VM 기반으로 구성되어 있으므로 물리 라우터를 Docker 기반으로 Emulation하여 제공한다.
+```
+sdn@mcpark-all-in-one-gw:~$ git clone -b 1.13 https://github.com/sonaproject/sona-setup.git
+Cloning into 'sona-setup'...
+remote: Counting objects: 245, done.
+remote: Total 245 (delta 0), reused 0 (delta 0), pack-reused 245
+Receiving objects: 100% (245/245), 40.22 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (133/133), done.
+Checking connectivity... done.
+sdn@mcpark-all-in-one-gw:~$ cd sona-setup/
+sdn@mcpark-all-in-one-gw:~/sona-setup$ cat externalRouterConfig.ini 
+floatingCidr = "172.27.0.1/24"
+externalPeerMac = "fa:00:00:00:00:01"
+sdn@mcpark-all-in-one-gw:~/sona-setup$ ./
+createExternalRouter.sh  docker-cleanup.sh        .git/                    pipework                 
+sdn@mcpark-all-in-one-gw:~/sona-setup$ ./createExternalRouter.sh 
+running done
+sudo: unable to resolve host mcpark-all-in-one-gw
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS              PORTS               NAMES
+dce2661fa7cb        opensona/router-docker   "/runssh.sh /usr/sbi…"   1 second ago        Up 1 second         22/tcp              router
+
+sdn@mcpark-all-in-one-gw:~/sona-setup$ ifconfig
+br-int    Link encap:Ethernet  HWaddr 46:c5:7d:83:59:48  
+          inet6 addr: fe80::e048:39ff:feaa:2a30/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:9 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:738 (738.0 B)
+
+docker0   Link encap:Ethernet  HWaddr 02:42:db:ba:6d:fe  
+          inet addr:172.17.0.1  Bcast:172.17.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::42:dbff:feba:6dfe/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 B)  TX bytes:648 (648.0 B)
+
+ens3      Link encap:Ethernet  HWaddr fa:16:3e:ab:ad:a7  
+          inet addr:10.1.1.15  Bcast:10.1.1.255  Mask:255.255.255.0
+          inet6 addr: fe80::f816:3eff:feab:ada7/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1450  Metric:1
+          RX packets:32643 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:29393 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:73882201 (73.8 MB)  TX bytes:2259324 (2.2 MB)
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:736 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:736 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1 
+          RX bytes:55296 (55.2 KB)  TX bytes:55296 (55.2 KB)
+
+router    Link encap:Ethernet  HWaddr 46:c5:7d:83:59:48  
+          inet6 addr: fe80::44c5:7dff:fe83:5948/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:16 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:1296 (1.2 KB)
+
+vethf364bfc Link encap:Ethernet  HWaddr a6:74:19:8a:60:c8  
+          inet6 addr: fe80::a474:19ff:fe8a:60c8/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:16 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:0 (0.0 B)  TX bytes:1296 (1.2 KB)
+```
+172.27.0.1/24 대역을 Serving하며 MAC 주소가 "fa:00:00:00:00:01"인 Router(port name: router)가 생성되었음을 알 수 있다. 
+
+Gateway 정보를 SONA에 REST API를 통해 전송한다.
+```
+{
+		"nodes" : [ 
+		{
+			"hostname" : "controller",
+                        "type" : "CONTROLLER",
+                        "managementIp" : "10.1.1.5",
+			"endPoint" : "10.1.1.5",
+                        "authentication" : {
+                                "version" : "v3",
+                                "port" : 80,
+                                "protocol" : "HTTP",
+                                "project" : "admin",
+                                "username" : "admin",
+                                "password" : "nova",
+                                "perspective" : "PUBLIC"
+                        }
+		},
+                {
+                    "hostname" : "gateway-01",
+                    "type" : "GATEWAY",
+                    "managementIp" : "10.1.1.15",
+                    "dataIp" : "10.1.1.15",
+                    "integrationBridge" : "of:00000000000000b1",
+                    "uplinkPort" : "router"
+                }
+       		]
+}
+
+$ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://172.27.0.3:8181/onos/openstacknode/configure -d @network-cfg.json.all
+```
+
+ONOS CLI에서 Gateway Node 정보 확인
+```
+onos> openstack-nodes
+Hostname            Type           Integration Bridge      Management IP           Data IP             VLAN Intf           Uplink Port    State
+compute-01          COMPUTE        of:00000000000000a1     10.1.1.5                10.1.1.5                                               COMPLETE
+controller          CONTROLLER     null                    10.1.1.5                                                                       COMPLETE
+gateway-01          GATEWAY        of:00000000000000b1     10.1.1.15               10.1.1.15                               router         INIT
+Total 3 nodes
+onos>
+```
+
+Gateway Node 초기화
+```
+onos> openstack-node-init gateway-01
+Initializing gateway-01
+Done.
+onos> openstack-nodes
+Hostname            Type           Integration Bridge      Management IP           Data IP             VLAN Intf           Uplink Port    State
+compute-01          COMPUTE        of:00000000000000a1     10.1.1.5                10.1.1.5                                               COMPLETE
+controller          CONTROLLER     null                    10.1.1.5                                                                       COMPLETE
+gateway-01          GATEWAY        of:00000000000000b1     10.1.1.15               10.1.1.15                               router         COMPLETE
+Total 3 nodes
+
+sdn@mcpark_all_gw:~/sona-setup$ sudo ovs-vsctl show
+47e03982-37ff-4888-8567-b57c68714858
+    Bridge br-int
+        Controller "tcp:10.1.1.5:6653"
+            is_connected: true
+        fail_mode: secure
+        Port vxlan
+            Interface vxlan
+                type: vxlan
+                options: {key=flow, remote_ip=flow}
+        Port br-int
+            Interface br-int
+                type: internal
+        Port router
+            Interface router
+    ovs_version: "2.8.1"
+```
+
+
+
+
+
+
+
+
+
+
 
 
 
