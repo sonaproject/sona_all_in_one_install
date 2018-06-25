@@ -569,8 +569,102 @@ ID                                      Name                External            
 7bfb0e90-faa1-4fbc-8d9a-4167abd66a5d    router              [172.27.0.2]        [20.1.1.1, 20.2.2.1]
 ```
 
+vm console에 접속하여 North-South Routing 처리가 가능함을 확인한다.
+```
+$ virsh list
+ Id    Name                           State
+----------------------------------------------------
+ 3     instance-00000003              running
+ 4     instance-00000004              running
 
+$ virsh console 4
+Connected to domain instance-00000004
+Escape character is ^]
 
+$ ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=50 time=62.714 ms
+64 bytes from 8.8.8.8: seq=1 ttl=50 time=50.856 ms
+64 bytes from 8.8.8.8: seq=2 ttl=50 time=51.502 ms
+
+--- 8.8.8.8 ping statistics ---
+3 packets transmitted, 3 packets received, 0% packet loss
+round-trip min/avg/max = 50.856/55.024/62.714 ms
+$ sudo ifconfig eth0 mtu 1300 up
+$ wget http://www.google.com
+Connecting to www.google.com (172.217.25.196:80)
+index.html           100% |*******************************| 11738   0:00:00 ETA
+```
+
+VM의 Private IP에 1:1로 Mapping되는 Floating IP를 할당함으로써 외부에서 VM에 접속 가능하다.
+
+Horizon을 통해 VM에 Floating IP를 할당한다.
+```
+onos> openstack-floatingips
+ID                                      Floating IP         Fixed IP
+ef28fd5a-7b50-4d9c-88e0-ef5b381ecea4    172.27.0.6          20.2.2.5
+```
+
+router 컨테이너에 접속하여 Floating IP를 통해 VM을 접속한다.
+```
+sdn@mcpark_all_gw:~$ sudo docker ps
+CONTAINER ID        IMAGE                    COMMAND                  CREATED             STATUS              PORTS               NAMES
+45a90e6d80b1        opensona/router-docker   "/runssh.sh /usr/sbi…"   2 hours ago         Up 2 hours          22/tcp              router
+sdn@mcpark_all_gw:~$ sudo docker exec -it 45a90e6d80b1 /bin/su
+/ # ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02
+          inet addr:172.17.0.2  Bcast:172.17.255.255  Mask:255.255.0.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:41 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:27 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:15548 (15.1 KiB)  TX bytes:2115 (2.0 KiB)
+
+eth1      Link encap:Ethernet  HWaddr FA:00:00:00:00:01
+          inet addr:172.27.0.1  Bcast:0.0.0.0  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:40 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:36 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:2841 (2.7 KiB)  TX bytes:14602 (14.2 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+/ # ssh cirros@172.27.0.6
+The authenticity of host '172.27.0.6 (172.27.0.6)' can't be established.
+RSA key fingerprint is SHA256:RF+1ilWSbrnrJY9C5Na3rGZ6zm4RpfxUCOFo3BtAS+A.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '172.27.0.6' (RSA) to the list of known hosts.
+cirros@172.27.0.6's password:
+$
+$
+$ ifconfig
+eth0      Link encap:Ethernet  HWaddr FA:16:3E:8C:77:F4
+          inet addr:20.2.2.5  Bcast:20.2.2.0  Mask:255.255.255.0
+          inet6 addr: fe80::f816:3eff:fe8c:77f4/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1300  Metric:1
+          RX packets:187 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:704 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:28643 (27.9 KiB)  TX bytes:52873 (51.6 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:77 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:77 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:8504 (8.3 KiB)  TX bytes:8504 (8.3 KiB)
+
+$
+```
 
 
 
