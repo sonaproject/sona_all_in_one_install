@@ -226,6 +226,8 @@ $
 ```
 
 router에서 interface 하나를 삭제하고 ping이 안되는 것을 확인한다.
+
+확인 후 이후 Exercise를 위해 다시 interface를 연결해둔다.
  
 # Exercise 2: SONA CLI
 현재 ONOS CLI에서 사용가능한 SONA 관련 CLI는 하기와 같다.
@@ -376,7 +378,7 @@ openstack-delete-peer-router: 물리 라우터 정보 삭제
 OpenStack에서 VxLAN Network를 사용하는 VM이 외부 인터넷 망과 통신을 하기 위해서는(=Norsh-South Routing) OpenStack Network Node 구성이 필요하다. Network Node에서 수행하는 Routing은 2가지 모드가 있는데, 1) Source NAT, 2) Floating IP 기반 Routing이 있다.
 
 SONA에서는 Network Node의 역할을 Gateway Node가 수행한다. Gateway Node는 Network Node가 제공하는 기능 외 하기의 Feature를 제공한다.
-1) Scability 보장, 2) Agentless, 3) 순수 OVS 기반 구현으로 Smart NIC, 물리 스위치 등으로 기능 Offload 가능
+  1) Scability 보장, 2) Agentless, 3) 순수 OVS 기반 구현으로 Smart NIC, 물리 스위치 등으로 기능 Offload 가능
 
 Gateway Node 생성을 위한 VM 생성 및 OVS 설치
 ```
@@ -552,6 +554,22 @@ sdn@mcpark_all_gw:~/sona-setup$ sudo ovs-vsctl show
             Interface router
     ovs_version: "2.8.1"
 ```
+
+Horizon을 이용, Docker를 통해 생성한 Network(172.27.0.0/24)를 등록하고 Router에 추가한다.
+이 때 Network의 경우 외부 Network=예, Network Type=Flat으로 설정한다. 외부 Network의 경우 '관리자' Tab에서만 생성가능하니 참고한다.
+```
+onos> openstack-networks 
+ID                                      Name                Network Mode        VNI                 Subnets 
+0e1fc728-9212-4184-b5e6-5241111a4ab4    exnet               FLAT                null                [172.27.0.0/24]
+90b74fc7-c6e7-4254-830c-ab46ece25f83    net1                VXLAN               96                  [20.1.1.0/24]
+84001230-81d4-48dd-9fbd-c7c48ab47814    net2                VXLAN               91                  [20.2.2.0/24]
+
+onos> openstack-routers 
+ID                                      Name                External            Internal
+7bfb0e90-faa1-4fbc-8d9a-4167abd66a5d    router              [172.27.0.2]        [20.1.1.1, 20.2.2.1]
+```
+
+
 
 
 
