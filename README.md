@@ -28,6 +28,12 @@ devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설�
 # chown -R stack:stack /opt/stack
 ```
 
+OVS 2.3.x를 설치하기 위한 ppa repo 업데이트
+```
+# add-apt-repository ppa:vshn/openvswitch
+# apt-get update
+```
+
 # All-in-One SONA 설치
 
 아래 작업부터 stack 유저로 로그인 하여 수행한다.
