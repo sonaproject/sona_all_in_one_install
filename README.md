@@ -7,8 +7,8 @@ Ubuntu 14.04가 설치된 VM
 
 apt repo update 및 git 설치
 ```
-$ sudo apt-get update
-$ sudo apt-get install -y git
+# apt-get update
+# apt-get install -y git
 ```
 
 devstack ocata 버전 다운로드
