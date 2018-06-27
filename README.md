@@ -82,7 +82,7 @@ deb-src http://security.ubuntu.com/ubuntu xenial-security multiverse
 
 update&upgrade&dist-upgrade
 ```
-~# apt-get update #Update 시 마지막 몇 Line은 Fail이 날 수 있으니 무시한다
+~# apt-get update #Update 시 마지막 몇 Line은 Fail이 날 수 있으나 무시하고 진행한다
 ~# apt-get upgrade
 ~# apt-get dist-upgrade
 ```
@@ -101,9 +101,14 @@ root@lb5004:~# cat /etc/issue
 Ubuntu 16.04.4 LTS \n \l
 ```
 
-
+# VirtualBox network 생성
+SONA 구동을 위해 NAT Network, Host Only Network가 각 1개씩 필요하다.
+상단의 Virtualbox - 설정 - 네트워크 Tab에서 NAT Network과 Host Only Network를 각각 1개씩 만든다.
 
 # Pre-requisite
+Ubuntu 16.04가 설치된 VM
+
+Virtualbox로 
 Ubuntu 16.04가 설치된 VM
 
 Nameserver 설정
