@@ -143,14 +143,14 @@ devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설�
 $ cd ~/devstack
 ```
 
-Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 IP 정보만 변경한다.
+Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 IP 정보만 변경한다. (sudo ifconfig 명령으로 확인)
 ```
 [[local|localrc]]
-HOST_IP=10.1.1.26
-SERVICE_HOST=10.1.1.26
-RABBIT_HOST=10.1.1.26
-DATABASE_HOST=10.1.1.26
-Q_HOST=10.1.1.26
+HOST_IP=ipaddress
+SERVICE_HOST=ipaddress
+RABBIT_HOST=ipaddress
+DATABASE_HOST=ipaddress
+Q_HOST=ipaddress
  
 ADMIN_PASSWORD=nova
 DATABASE_PASSWORD=$ADMIN_PASSWORD
@@ -194,6 +194,34 @@ KEYSTONE_BRANCH=stable/queens
 NEUTRON_BRANCH=stable/queens
 NOVA_BRANCH=stable/queens
 ```
+
+하기와 같이 sed 명령어를 이용하여 바로 수정 가능하다.
+
+```
+# sudo ifconfig
+$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:00:34:15:00:0b
+          inet addr:172.27.0.248  Bcast:172.27.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::34ff:fe15:b/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:38749 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:33149 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:215120687 (215.1 MB)  TX bytes:3375545 (3.3 MB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:417 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:417 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1
+          RX bytes:29761 (29.7 KB)  TX bytes:29761 (29.7 KB)
+
+$ sed -i sed -i 's/ipaddress/172\.27\.0\.248/g' local.conf
+$ cat local.conf
+```
+
 
 Stack.sh 명령 수행을 통해 OpenStack을 설치한다.
 ```
