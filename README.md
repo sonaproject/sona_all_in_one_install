@@ -10,12 +10,12 @@ Ubuntu Mirror 변경
 ```
 # sed -i '47s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
 # sed -i '48s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
-sed -i '49s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
-sed -i '50s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
-sed -i '51s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
-sed -i '52s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+# sed -i '49s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+# sed -i '50s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+# sed -i '51s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+# sed -i '52s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
 
-sed -i 's/mirror2\.g\.ucloudbiz/archive\.ubuntu/g' /etc/apt/sources.list
+# sed -i 's/mirror2\.g\.ucloudbiz/archive\.ubuntu/g' /etc/apt/sources.list
 ```
 
 잘 변경되었는지 확인
