@@ -143,7 +143,7 @@ devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설�
 $ cd ~/devstack
 ```
 
-Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 IP 정보만 변경한다. (sudo ifconfig 명령으로 확인)
+Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 ipaddress 정보만 변경한다. (sudo ifconfig 명령으로 확인)
 ```
 [[local|localrc]]
 HOST_IP=ipaddress
@@ -196,7 +196,6 @@ NOVA_BRANCH=stable/queens
 ```
 
 하기와 같이 sed 명령어를 이용하여 바로 수정 가능하다.
-
 ```
 # sudo ifconfig
 $ ifconfig
