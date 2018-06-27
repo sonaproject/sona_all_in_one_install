@@ -96,12 +96,14 @@ $ ./stack.sh
 설치 완료 후 동작 확인을 위해 Dashboard에 접속해본다. (ID/Password: admin/nova)
 
 ONOS 연동 확인을 위해 Network/Subnet을 생성해본다.
+
  ㅇ Network Name: net1, net2
+ 
  ㅇ Subnet Name: snet1, snet2
+ 
  ㅇ CIDR: 20.1.1.0/24, 20.2.2.0/24
+ 
  ㅇ Gateway: 20.1.1.1, 20.2.2.1
- 
- 
  
 ONOS에 접속하여 정상 동작을 확인한다.
 ```
