@@ -20,7 +20,7 @@ sed -i 's/mirror2\.g\.ucloudbiz/archive\.ubuntu/g' /etc/apt/sources.list
 
 잘 변경되었는지 확인
 ```
-# cat /etc/apt/source.list
+# cat /etc/apt/sources.list
 # See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
 # newer versions of the distribution.
 
