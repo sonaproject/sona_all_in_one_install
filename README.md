@@ -82,7 +82,7 @@ deb-src http://security.ubuntu.com/ubuntu xenial-security multiverse
 
 update&upgrade&dist-upgrade
 ```
-~# apt-get update
+~# apt-get update #Update 시 마지막 몇 Line은 Fail이 날 수 있으니 무시한다
 ~# apt-get upgrade
 ~# apt-get dist-upgrade
 ```
@@ -90,7 +90,7 @@ update&upgrade&dist-upgrade
 Ubuntu 16.04로 Upgrade
 ```
 ~# apt-get install update-manager-core
-~# sudo do-release-upgrade
+~# do-release-upgrade
 ```
 설치 중간에 중간에 나오는 질문은 모두 'Yes'한다.
 특히 'Restart services during package upgrades without asking?' 질문이 있는데 'Yes' 한다.
