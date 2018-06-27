@@ -93,6 +93,13 @@ $ sudo do-release-upgrade
 설치 중간에 중간에 나오는 질문은 모두 'Yes'한다.
 특히 'Restart services during package upgrades without asking?' 질문이 있는데 'Yes' 한다.
 
+Reboot 후 Upgrade된 Ubuntu Version 확인
+```
+root@lb5004:~# cat /etc/issue
+Ubuntu 16.04.4 LTS \n \l
+```
+
+
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
 
