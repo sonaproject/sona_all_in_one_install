@@ -3,18 +3,38 @@ https://wiki.onosproject.org/display/ONOS/SONA+User+Guide
 
 https://github.com/sonaproject
 
+# Ubuntu 14.04 to 16.04 Upgrade
+Ucloud를 통해 지급되는 Ubuntu 14.04 VM의 경우 Ubuntu Repository 이슈로 Newton 이상의 Openstack 설치가 어려우므로 16.04로 Upgrade한다.
+
+Ubuntu Mirror 변경
+```
+sed -i '47s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+sed -i '48s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+sed -i '49s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+sed -i '50s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+sed -i '51s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+sed -i '52s/mirror2\.g\.ucloudbiz/security\.ubuntu/g' /etc/apt/sources.list
+
+sed -i 's/mirror2\.g\.ucloudbiz/archive\.ubuntu/g' /etc/apt/sources.list
+cat /etc/apt/source.list
+```
+
+update&upgrade&dist-upgrade
+```
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get dist-upgrade
+```
+
+Ubuntu 16.04로 Upgrade
+```
+$ sudo apt-get install update-manager-core
+$ sudo do-release-upgrade
+```
+
+
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
-
-SONA를 설치할 User에 대한 sudo 권한 부여 (하기 Example의 경우 sdn User에 대한 sudo 권한을 부여한다.)
-```
-root@mcpark-all-in-one:~# visudo
-...
-# User privilege specification
-root    ALL=(ALL:ALL) ALL
-sdn     ALL=(ALL) NOPASSWD:ALL
-...
-```
 
 Nameserver 설정
 ```
@@ -32,7 +52,25 @@ $ sudo apt-get install -y git
 #All-in-One SONA 설치
 Devstack Queens를 Clone 한다.
 ```
-$ git clone -b stable/queens https://git.openstack.org/openstack-dev/devstack
+# cd ~/
+# git clone -b stable/queens https://git.openstack.org/openstack-dev/devstack
+```
+
+stack user 생성
+```
+# ~/devstack/tools/create-stack-user.sh
+```
+
+devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설정
+```
+# cp -R ~/devstack/ /opt/stack
+# chown -R stack:stack /opt/stack
+```
+
+아래 작업부터 stack 유저로 로그인 하여 수행한다.
+```
+# su - stack
+$ cd ~/devstack
 ```
 
 Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 IP 정보만 변경한다.
