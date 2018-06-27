@@ -102,6 +102,7 @@ Ubuntu 16.04.4 LTS \n \l
 ```
 
 
+
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
 
@@ -228,20 +229,7 @@ $ cd ~/devstack
 $ ./stack.sh
 ```
 
-설치 완료 후 동작 확인을 위해 Dashboard에 접속해본다.
-ID/Password는 admin/nova이며, url은 http://14.63.161.186/dashboard 이다.
-
-ONOS 연동 확인을 위해 Network/Subnet을 생성해본다.
-
- ㅇ Network Name: net1, net2
- 
- ㅇ Subnet Name: snet1, snet2
- 
- ㅇ CIDR: 20.1.1.0/24, 20.2.2.0/24
- 
- ㅇ Gateway: 20.1.1.1, 20.2.2.1
- 
-ONOS에 접속하여 정상 동작을 확인한다.
+설치 완료 후 ONOS CLI에 접속하여 상태를 확인한다. Compute Node가 INIT상태이면 Complete 상태로 초기화 진행한다.
 ```
 # ssh -p 8101 karaf@127.0.0.1
 Password authentication
@@ -261,6 +249,7 @@ Come help out! Find out how at: contribute.onosproject.org
 Hit '<tab>' for a list of available commands
 and '[cmd] --help' for help on a specific command.
 Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
+
 onos> apps -s -a
 *  24 org.onosproject.ovsdb-base           1.13.1   OVSDB Provider
 *  25 org.onosproject.drivers.ovsdb        1.13.1   Generic OVSDB Drivers
@@ -269,15 +258,7 @@ onos> apps -s -a
 *  78 org.onosproject.drivers              1.13.1   Default Drivers
 * 155 org.onosproject.openstacknode        1.13.1   OpenStack Node Bootstrap
 * 161 org.onosproject.openstacknetworking  1.13.1   OpenStack Networking Application
-onos> openstack-networks 
-ID                                      Name                Network Mode        VNI                 Subnets 
-90b74fc7-c6e7-4254-830c-ab46ece25f83    net1                VXLAN               96                  [20.1.1.0/24]
-84001230-81d4-48dd-9fbd-c7c48ab47814    net2                VXLAN               91                  [20.2.2.0/24]
-onos> 
-```
 
-Compute node state를 확인한다. INIT상태이면 Complete 상태로 초기화 진행한다.
-```
 onos> openstack-nodes
 Hostname            Type           Integration Bridge      Management IP           Data IP             VLAN Intf           Uplink Port    State
 compute-01          COMPUTE        of:00000000000000a1     172.27.0.248            172.27.0.248                                           INIT
@@ -297,6 +278,46 @@ Total 2 nodes
 onos>
 ```
 
+동작 확인을 위해 Dashboard에 접속해본다.
+ID/Password는 admin/nova이며, url은 http://ip_address/dashboard 이다.
+
+ONOS 연동 확인을 위해 Network/Subnet을 생성해본다.
+
+ ㅇ Network Name: net1, net2
+ 
+ ㅇ Subnet Name: snet1, snet2
+ 
+ ㅇ CIDR: 20.1.1.0/24, 20.2.2.0/24
+ 
+ ㅇ Gateway: 20.1.1.1, 20.2.2.1
+ 
+
+```
+# ssh -p 8101 karaf@127.0.0.1
+Password authentication
+Password: karaf
+Welcome to Open Network Operating System (ONOS)!
+     ____  _  ______  ____     
+    / __ \/ |/ / __ \/ __/   
+   / /_/ /    / /_/ /\ \     
+   \____/_/|_/\____/___/     
+                               
+Documentation: wiki.onosproject.org      
+Tutorials:     tutorials.onosproject.org 
+Mailing lists: lists.onosproject.org     
+
+Come help out! Find out how at: contribute.onosproject.org 
+
+Hit '<tab>' for a list of available commands
+and '[cmd] --help' for help on a specific command.
+Hit '<ctrl-d>' or type 'system:shutdown' or 'logout' to shutdown ONOS.
+
+onos> openstack-networks 
+ID                                      Name                Network Mode        VNI                 Subnets 
+90b74fc7-c6e7-4254-830c-ab46ece25f83    net1                VXLAN               96                  [20.1.1.0/24]
+84001230-81d4-48dd-9fbd-c7c48ab47814    net2                VXLAN               91                  [20.2.2.0/24]
+onos> 
+```
 
 # Exercise 1: East-west routing
 Openstack에서 서로 다른 Network에 속한 VM간 통신이 필요한 경우(=east-west routing), 가상의 router를 생성하여 Network를 연동해야 한다.
