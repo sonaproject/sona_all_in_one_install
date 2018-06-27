@@ -107,9 +107,7 @@ SONA 구동을 위해 NAT Network, Host Only Network가 각 1개씩 필요하다
 
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
-
-Virtualbox로 
-Ubuntu 16.04가 설치된 VM
+Virtualbox로 생성한 VM의 경우 NAT Network과 Host Only Network으로 생성한 2개의 Interface 필수
 
 Nameserver 설정
 ```
@@ -149,7 +147,8 @@ devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설�
 $ cd ~/devstack
 ```
 
-Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample에서 ipaddress 정보만 변경한다. (sudo ifconfig 명령으로 확인)
+Devstack 설정을 위한 local.conf를 생성한다. 하기 Sample을 local.conf 파일에 저장 후 ipaddress 정보만 변경한다.
+ip 정보는 sudo ifconfig 명령으로 확인 가능하다
 ```
 [[local|localrc]]
 HOST_IP=ipaddress
@@ -223,7 +222,7 @@ lo        Link encap:Local Loopback
           collisions:0 txqueuelen:1
           RX bytes:29761 (29.7 KB)  TX bytes:29761 (29.7 KB)
 
-$ sed -i sed -i 's/ipaddress/172\.27\.0\.248/g' local.conf
+$ sed -i 's/ipaddress/172\.27\.0\.248/g' local.conf
 $ cat local.conf
 ```
 
