@@ -610,10 +610,12 @@ remote: Total 245 (delta 0), reused 0 (delta 0), pack-reused 245
 Receiving objects: 100% (245/245), 40.22 KiB | 0 bytes/s, done.
 Resolving deltas: 100% (133/133), done.
 Checking connectivity... done.
+
 sdn@mcpark-all-in-one-gw:~$ cd sona-setup/
 sdn@mcpark-all-in-one-gw:~/sona-setup$ cat externalRouterConfig.ini 
 floatingCidr = "172.27.0.1/24"
 externalPeerMac = "fa:00:00:00:00:01"
+
 sdn@mcpark-all-in-one-gw:~/sona-setup$ ./
 createExternalRouter.sh  docker-cleanup.sh        .git/                    pipework                 
 sdn@mcpark-all-in-one-gw:~/sona-setup$ ./createExternalRouter.sh 
