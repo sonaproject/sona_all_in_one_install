@@ -104,6 +104,8 @@ Ubuntu 16.04.4 LTS \n \l
 # VirtualBox network 생성
 SONA 구동을 위해 NAT Network, Host Only Network가 각 1개씩 필요하다.
 상단의 Virtualbox - 설정 - 네트워크 Tab에서 NAT Network과 Host Only Network를 각각 1개씩 만든다.
+설정 방법은 하기 링크를 참조한다.
+https://www.evernote.com/l/AqpHBdQpRW1Ec6ptxN6pW9JBG0tYymym6Po
 
 # Pre-requisite
 Ubuntu 16.04가 설치된 VM
