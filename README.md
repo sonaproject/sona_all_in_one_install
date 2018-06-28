@@ -712,7 +712,7 @@ Gateway 정보를 SONA에 REST API를 통해 전송한다.
        		]
 }
 
-$ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://172.27.0.3:8181/onos/openstacknode/configure -d @network-cfg.json.all
+$ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://172.27.0.3:8181/onos/openstacknode/configure -d @network-cfg.json.all.gw
 ```
 
 ONOS CLI에서 Gateway Node 정보 확인
