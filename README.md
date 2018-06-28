@@ -284,6 +284,8 @@ onos>
 
 동작 확인을 위해 Dashboard에 접속해본다.
 ID/Password는 admin/nova이며, url은 http://ip_address/dashboard 이다.
+Horizon이 익숙하지 않은 분들은 하기 링크를 보면서 진행하면 됩니다.
+https://www.evernote.com/l/AqrYs4JkCBxCV7eGtUym0aiQIT44b0bVECI
 
 ONOS 연동 확인을 위해 Network/Subnet을 생성해본다.
 
