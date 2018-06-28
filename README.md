@@ -358,7 +358,7 @@ d064ef9c-1a29-4b1d-91e9-e5f506f4a212    net2                fa:16:3e:70:46:cc   
  
 vm간 ping이 되는 것을 확인한다.
 ```
-Mincheolui-MacBook-Pro:~ mincheolpark$ ssh sdn@172.27.0.3
+Mincheolui-MacBook-Pro:~ mincheolpark$ ssh root@172.27.0.3
 Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.4.0-101-generic x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -374,13 +374,13 @@ Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.4.0-101-generic x86_64)
 
 *** System restart required ***
 Last login: Thu Jun 21 07:42:24 2018 from 172.16.101.11
-sdn@mcpark-all-in-one:~$ virsh list
+~# sudo virsh list
  Id    Name                           State
 ----------------------------------------------------
  3     instance-00000003              running
  4     instance-00000004              running
 
-sdn@mcpark-all-in-one:~$ virsh console 4
+# sudo virsh console 4
 Connected to domain instance-00000004
 Escape character is ^]
 
@@ -419,6 +419,7 @@ PING 20.1.1.5 (20.1.1.5): 56 data bytes
 round-trip min/avg/max = 1.387/3.105/6.455 ms
 $ 
 ```
+Console에서 빠져나올때는 'CTRL + 6 + ]'을 이용한다.
 
 router에서 interface 하나를 삭제하고 ping이 안되는 것을 확인한다.
 
@@ -565,7 +566,6 @@ Router IP           Mac Address         VLAN ID
 ```
 
 openstack-update-peer-router: 물리 라우터의 Mac or Vlan ID 정보 수동 변경
-
 
 openstack-delete-peer-router: 물리 라우터 정보 삭제
 
