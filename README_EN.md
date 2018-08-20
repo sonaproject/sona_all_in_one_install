@@ -4,7 +4,9 @@ https://github.com/sonaproject
 
 # Prerequisite
 2 Baremetal nodes (one is for  All-in-One node that has Control/Compute and SONA in one server) and the other is for a Gateway)
+
 OS: Ubuntu 16.04 (For Openstack node)
+
 all interfaces on nodes should be set to MTU 1600Byte. If you don't have right to configure switch, then set MTU 1500 to node interfaces and set MTU 1400 to VM interface.
 
 Note that, OVSDB port is basically 6640, but in all-in-one installation case we use 6650 as the OVSDB port so that ONOS and Openstack Compute node can run at the same node.
