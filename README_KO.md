@@ -180,7 +180,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=onos_ml2
 Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vlan,vxlan
 ML2_L3_PLUGIN=onos_router
 NEUTRON_CREATE_INITIAL_NETWORKS=False
-enable_plugin networking-onos stable/queens https://github.com/openstack/networking-onos.git
+enable_plugin networking-onos https://github.com/openstack/networking-onos.git stable/queens
 ONOS_MODE=allinone
  
 # Services
