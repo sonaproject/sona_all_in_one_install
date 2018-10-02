@@ -579,7 +579,7 @@ lo        Link encap:Local Loopback
 
 Gateway Node는 Data Plane IP 외 외부망과의 연동을 위한 별도의 Uplink가 필요하다(Network Node도 동일). 본 Exercise에서는 Gateway Node가 VM 기반으로 구성되어 있으므로 물리 라우터를 Docker 기반으로 Emulation하여 제공한다.
 ```
-sdn@mcpark-all-in-one-gw:~$ git clone -b 1.13 https://github.com/sonaproject/sona-setup.git
+sdn@mcpark-all-in-one-gw:~$ git clone https://github.com/sonaproject/sona-setup.git
 Cloning into 'sona-setup'...
 remote: Counting objects: 245, done.
 remote: Total 245 (delta 0), reused 0 (delta 0), pack-reused 245
@@ -664,12 +664,18 @@ Gateway 정보를 SONA에 REST API를 통해 전송한다.
                     "managementIp" : "10.1.1.15",
                     "dataIp" : "10.1.1.15",
                     "integrationBridge" : "of:00000000000000b1",
-                    "uplinkPort" : "router"
+                    "uplinkPort" : "router",
+		    "controllers": [
+                        {
+                            "ip": "10.1.1.5",
+                            "port": 6653
+                        }
+                    ]
                 }
        		]
 }
 
-$ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://172.27.0.3:8181/onos/openstacknode/configure -d @network-cfg.json.all.gw
+$ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://127.0.0.1:8181/onos/openstacknode/configure -d @sona_config
 ```
 
 ONOS CLI에서 Gateway Node 정보 확인
