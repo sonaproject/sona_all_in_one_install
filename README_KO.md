@@ -658,21 +658,6 @@ Gateway 정보를 SONA에 REST API를 통해 전송한다.
 ```
 {
 		"nodes" : [ 
-		{
-			"hostname" : "controller",
-                        "type" : "CONTROLLER",
-                        "managementIp" : "10.1.1.5",
-			"endPoint" : "10.1.1.5",
-                        "authentication" : {
-                                "version" : "v3",
-                                "port" : 80,
-                                "protocol" : "HTTP",
-                                "project" : "admin",
-                                "username" : "admin",
-                                "password" : "nova",
-                                "perspective" : "PUBLIC"
-                        }
-		},
                 {
                     "hostname" : "gateway-01",
                     "type" : "GATEWAY",
