@@ -577,6 +577,11 @@ lo        Link encap:Local Loopback
           RX bytes:55296 (55.2 KB)  TX bytes:55296 (55.2 KB)
 ```
 
+OVSDB port open (본 예제에서는 6650 port open)
+'''
+sudo ovs-vsctl set-manager ptcp:6650
+'''
+
 Gateway Node는 Data Plane IP 외 외부망과의 연동을 위한 별도의 Uplink가 필요하다(Network Node도 동일). 본 Exercise에서는 Gateway Node가 VM 기반으로 구성되어 있으므로 물리 라우터를 Docker 기반으로 Emulation하여 제공한다.
 ```
 sdn@mcpark-all-in-one-gw:~$ git clone https://github.com/sonaproject/sona-setup.git
