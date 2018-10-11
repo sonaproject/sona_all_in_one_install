@@ -3,6 +3,9 @@ https://wiki.onosproject.org/display/ONOS/SONA+User+Guide
 
 https://github.com/sonaproject
 
+Mail Address: dan.park@sk.com
+
+
 # Ubuntu 14.04 to 16.04 Upgrade (16.04일 경우 Skip)
 Ucloud를 통해 지급되는 Ubuntu 14.04 VM의 경우 Ubuntu Repository 이슈로 Newton 이상의 Openstack 설치가 어려우므로 16.04로 Upgrade한다.
 
