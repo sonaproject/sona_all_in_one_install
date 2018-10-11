@@ -681,6 +681,9 @@ Gateway 정보를 SONA에 REST API를 통해 전송한다.
 }
 
 $ curl --user onos:rocks -X POST -H "Content-Type: application/json" http://127.0.0.1:8181/onos/openstacknode/configure -d @sona_config
+
+ovsdb listen 포트 변경 명령
+onos> cfg set org.onosproject.openstacknode.impl.DefaultOpenstackNodeHandler ovsdbPortNum 6650
 ```
 
 ONOS CLI에서 Gateway Node 정보 확인
