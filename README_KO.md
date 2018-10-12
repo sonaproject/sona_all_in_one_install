@@ -129,10 +129,10 @@ apt repo update 및 git 설치
 ```
 
 #All-in-One SONA 설치
-Devstack Queens를 Clone 한다.
+Devstack Pike를 Clone 한다.
 ```
 # cd ~/
-# git clone -b stable/queens https://git.openstack.org/openstack-dev/devstack
+# git clone -b stable/pike https://git.openstack.org/openstack-dev/devstack
 ```
 
 stack user 생성
@@ -155,11 +155,11 @@ $ cd ~/devstack
 Devstack 설정을 위한 local.conf를 생성한다. 
 ```
 [[local|localrc]]
-HOST_IP=127.0.0.1
-SERVICE_HOST=127.0.0.1
-RABBIT_HOST=127.0.0.1
-DATABASE_HOST=127.0.0.1
-Q_HOST=127.0.0.1
+HOST_IP=(ip address of VM)
+SERVICE_HOST=(ip address of VM)
+RABBIT_HOST=(ip address of VM)
+DATABASE_HOST=(ip address of VM)
+Q_HOST=(ip address of VM)
  
 ADMIN_PASSWORD=nova
 DATABASE_PASSWORD=$ADMIN_PASSWORD
@@ -183,7 +183,7 @@ Q_ML2_PLUGIN_MECHANISM_DRIVERS=onos_ml2
 Q_ML2_PLUGIN_TYPE_DRIVERS=flat,vlan,vxlan
 ML2_L3_PLUGIN=onos_router
 NEUTRON_CREATE_INITIAL_NETWORKS=False
-enable_plugin networking-onos https://github.com/openstack/networking-onos.git stable/queens
+enable_plugin networking-onos https://github.com/openstack/networking-onos.git stable/pike
 ONOS_MODE=allinone
  
 # Services
@@ -197,11 +197,11 @@ VNCSERVER_LISTEN=$HOST_IP
 LIBVIRT_TYPE=qemu
  
 # Branches
-GLANCE_BRANCH=stable/queens
-HORIZON_BRANCH=stable/queens
-KEYSTONE_BRANCH=stable/queens
-NEUTRON_BRANCH=stable/queens
-NOVA_BRANCH=stable/queens
+GLANCE_BRANCH=stable/pike
+HORIZON_BRANCH=stable/pike
+KEYSTONE_BRANCH=stable/pike
+NEUTRON_BRANCH=stable/pike
+NOVA_BRANCH=stable/pike
 ```
 
 Stack.sh 명령 수행을 통해 OpenStack을 설치한다.
