@@ -140,6 +140,8 @@ stack user 생성
 # ~/devstack/tools/create-stack-user.sh
 ```
 
+* Ubuntu 16.04 특정 Version의 경우 stack user생성이 안되는 경우가 있는데 이때는 sudo 권한을 가지고 있는 임의의 계정으로 진행해도 무관하다.
+
 devstack 소스를 /opt/stack/ 디렉토리에 복사하고 stack ownership 설정
 ```
 # cp -R ~/devstack/ /opt/stack
