@@ -1,0 +1,5 @@
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository cloud-archive:pike
+sudo apt-get update
+
+sudo apt-get install openvswitch-switch
