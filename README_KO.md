@@ -557,6 +557,18 @@ SONA에서는 Network Node의 역할을 Gateway Node가 수행한다. Gateway No
   1) Scability 보장, 2) Agentless, 3) 순수 OVS 기반 구현으로 Smart NIC, 물리 스위치 등으로 기능 Offload 가능
 
 Gateway Node 생성을 위한 VM 생성 및 OVS 설치
+Gateway Node의 OVS version은 2.6.0 이상을 권장한다.
+하기 방법을 통해 2.8 대의 OVS 를 설치 가능하다.
+
+```
+sudo apt-get install software-properties-common -y
+sudo add-apt-repository cloud-archive:pike
+sudo apt-get update
+sudo apt-get install openvswitch-switch
+```
+
+설치 후 OVS version을 확인한다.
+
 ```
 sdn@mcpark-all-in-one-gw:~$ sudo ovs-vsctl --version
 sudo: unable to resolve host mcpark-all-in-one-gw
