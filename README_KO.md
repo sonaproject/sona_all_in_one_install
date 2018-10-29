@@ -745,7 +745,7 @@ sdn@mcpark_all_gw:~/sona-setup$ sudo ovs-vsctl show
 ```
 
 Horizon을 이용, Docker를 통해 생성한 Network(172.27.0.0/24)를 등록하고 Router에 추가한다.
-이 때 Network의 경우 외부 Network=예, Network Type=Flat으로 설정한다. 외부 Network의 경우 '관리자' Tab에서만 생성가능하니 참고한다.
+이 때 Network의 경우 외부 Network=예, Network Type=Flat, 물리적인 네트워크=public으로 설정한다. 외부 Network의 경우 '관리자' Tab에서만 생성가능하니 참고한다.
 ```
 onos> openstack-networks 
 ID                                      Name                Network Mode        VNI                 Subnets 
