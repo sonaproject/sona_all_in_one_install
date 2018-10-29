@@ -1,10 +1,3 @@
-# 긴급 공지: SONA Upgrade로 OVS 2.8이상부터 지원가능 합니다. OVS version확인하시고 업그레이드 필요하시 아래 Command대로 업그레이드 해주세요
-```
-sudo apt-get install software-properties-common -y
-sudo add-apt-repository cloud-archive:pike
-sudo apt-get update
-sudo apt-get install openvswitch-switch
-```
 # References
 https://wiki.onosproject.org/display/ONOS/SONA+User+Guide
 
