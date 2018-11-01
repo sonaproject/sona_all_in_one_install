@@ -551,12 +551,14 @@ openstack-update-peer-router: 물리 라우터의 Mac or Vlan ID 정보 수동 �
 openstack-delete-peer-router: 물리 라우터 정보 삭제
 
 # Exercise 3: SONA Gateway 구성을 통한 North-South Routing
-OpenStack에서 VxLAN Network를 사용하는 VM이 외부 인터넷 망과 통신을 하기 위해서는(=Norsh-South Routing) OpenStack Network Node 구성이 필요하다. Network Node에서 수행하는 Routing은 2가지 모드가 있는데, 1) Source NAT, 2) Floating IP 기반 Routing이 있다.
+OpenStack에서 VxLAN Network를 사용하는 VM이 외부 인터넷 망과 통신을 하기 위해서는(=Norsh-South Routing) OpenStack Network Node 구성이 필요하다.
+Network Node에서 수행하는 Routing은 2가지 모드가 있는데, 1) Source NAT, 2) Floating IP 기반 Routing이 있다.
 
 SONA에서는 Network Node의 역할을 Gateway Node가 수행한다. Gateway Node는 Network Node가 제공하는 기능 외 하기의 Feature를 제공한다.
   1) Scability 보장, 2) Agentless, 3) 순수 OVS 기반 구현으로 Smart NIC, 물리 스위치 등으로 기능 Offload 가능
 
 Gateway Node 생성을 위한 VM 생성 및 OVS 설치
+Gateway Node는 Compute Node에 동시 구동이 불가능하므로 반드시 별도 Node로 구성해야 한다.
 Gateway Node의 OVS version은 2.6.0 이상을 권장한다.
 하기 방법을 통해 2.8 대의 OVS 를 설치 가능하다.
 
